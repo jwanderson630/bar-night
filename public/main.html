@@ -6,6 +6,7 @@
 			<button type="submit" ng-disabled="searching" class="btn btn-primary">Search</button>
 		</span>
 	</div>
+	<div uib-alert class="alert alert-danger" ng-show="alertVisible" close="alertClose()">No results were found, please search again</div>
 </form>
 
 <uib-accordion>

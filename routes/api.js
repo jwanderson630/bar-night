@@ -80,6 +80,7 @@ router.route('/bars/:location')
 			})
 			})
 			.catch(function(err){
+				res.send(err.statusCode);
 				console.log(err);
 			});
 	

@@ -32,6 +32,7 @@ app.controller('mainController', function($scope, $rootScope, $location, $http){
 	$scope.bars = [];
 	$scope.searching = false;
 	$scope.title = "Search for bars in your area...";
+	$scope.alertVisible = false;
 
 	
 
@@ -53,16 +54,24 @@ app.controller('mainController', function($scope, $rootScope, $location, $http){
 		}
 	};
 
+	$scope.alertClose = function(){
+		$scope.alertVisible = !$scope.alertVisible;
+	};
+
 	$scope.yelpSearch = function(){
 		$scope.searching = true;
 		if ($rootScope.authenticated && $scope.location !== null){
 			$http.post('/api/user/' + $scope.location + '/' + $rootScope.current_user);
 		}
-		$http.get('/api/bars/' + $scope.location).success(function(data){
-			$scope.bars = data;
+		$http.get('/api/bars/' + $scope.location).then(function(data){
+			$scope.bars = data.data;
+			console.log(data);
 			$scope.searching = false;
 			$scope.title = 'Results for ' + $scope.location;
-		})
+		}, function(){
+			$scope.searching = false;
+			$scope.alertVisible = !$scope.alertVisible;
+		});
 	};
 
 	if ($rootScope.authenticated && $rootScope.user_location !== null){
@@ -74,6 +83,12 @@ app.controller('mainController', function($scope, $rootScope, $location, $http){
 app.controller('authController', function($scope, $http, $rootScope, $location){
 	$scope.user = {username: '', password: ''};
 	$scope.error_message= '';
+	$scope.alertVisible = false;
+
+
+	$scope.alertClose = function(){
+		$scope.alertVisible = !$scope.alertVisible;
+	};
 
 	$scope.login = function(){
 		$http.post('/auth/login', $scope.user).success(function(data){
@@ -84,7 +99,8 @@ app.controller('authController', function($scope, $http, $rootScope, $location){
 				$location.path('/');
 			}
 			else {
-				$scope.error_message = data.message;
+				$scope.error_message = "Invalid username or password";
+				$scope.alertClose();
 			}
 		});
 	};
@@ -97,7 +113,8 @@ app.controller('authController', function($scope, $http, $rootScope, $location){
 				$location.path('/');
 			}
 			else {
-				$scope.error_message = data.message;
+				$scope.error_message = "User name already taken";
+				$scope.alertClose();
 			}
 		});
 	};
