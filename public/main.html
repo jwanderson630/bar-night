@@ -1,4 +1,44 @@
-<form ng-submit="searchYelp()">
-	<input type="text" class="form-control" ng-model="location"/>
-	<button type="submit" class="btn btn-primary">Search</button>
+<h1 class="text-center title">{{title}}</h1>
+<form  ng-submit="yelpSearch()">
+	<div class="input-group">
+		<input ng-disabled="searching" type="text" placeholder="Enter a city name or postal code" class="form-control" ng-model="location"/>
+		<span class="input-group-btn">
+			<button type="submit" ng-disabled="searching" class="btn btn-primary">Search</button>
+		</span>
+	</div>
 </form>
+
+<uib-accordion>
+	<div uib-accordion-group class="panel-default bar-list" ng-repeat="bar in bars">
+		<div uib-accordion-heading>
+			<div class="row">
+				<div class="col-xs-6 text-left">
+					{{bar.name}}
+					<span class="badge" ng-show="authenticated && going(bar)">Going!</span>
+				</div>
+				<div class="col-xs-6 text-right">
+					<span class="address">{{bar.location}}</span>
+					<img ng-src="{{bar.rating_img_url}}"/>
+				</div>
+			</div>
+		</div>
+		<div class="container-fluid">
+			<div class="col-xs-12 col-sm-3">
+				<img class="thumbnail" ng-src="{{bar.image_url}}"/>
+			</div>
+			<div class="col-xs-12 col-sm-9 ">
+				<div class="row bar-info">
+					<div class="col-xs-12 col-sm-6 text-center">Rating: {{bar.rating}} / 5.0</div>
+					<div class="col-xs-12 col-sm-6 text-center">People going: {{bar.going.length}}</div>
+				</div>
+				<div class="row well">
+					{{bar.snippet_text}}
+				</div>
+				<div class="row text-right">
+					<button ng-click="notGoing(bar)" class="btn btn-danger" ng-show="authenticated && going(bar)">I'm not going</button>
+					<button ng-click="isGoing(bar)" class="btn btn-primary" ng-hide="!authenticated || going(bar)">I'm going!</button>
+					<a target="_blank" ng-href="{{bar.url}}" class="btn btn-info">More info</a>
+				</div>
+			</div>
+	</div>
+</uib-accordion>

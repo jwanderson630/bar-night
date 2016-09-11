@@ -9,12 +9,16 @@ var userSchema = new mongoose.Schema({
 });
 
 var barSchema = new mongoose.Schema({
+	name: String,
 	going: Array,
-	photo: String,
-	location: Array,
+	rating_img_url: String,
+	rating: String,
+	image_url: String,
+	location: String,
 	url: String,
-	text: String,
-	yelpId: String
+	snippet_text: String,
+	yelpId: String,
+	createdAt: { type: Date, expires: 86400, default: Date.now }
 });
 
 mongoose.model('User', userSchema);

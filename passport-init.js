@@ -24,7 +24,7 @@ module.exports = function(passport){
         },
         function(req, username, password, done) { 
 
-            Users.findOne({'username': username},
+            User.findOne({'username': username},
                 function(err, user){
                     if (err){
                         return done(err);
@@ -33,7 +33,7 @@ module.exports = function(passport){
                         console.log('User with username ' + username + " not found");
                         return done(null, false);
                     }
-                    if (!isvalidPassword(user, password)){
+                    if (!isValidPassword(user, password)){
                         console.log("Incorrect username or password");
                         return done(null, false);
                     }
@@ -44,10 +44,10 @@ module.exports = function(passport){
     ));
 
     passport.use('signup', new LocalStrategy({
-            passReqToCallback : true // allows us to pass back the entire request to the callback
+            passReqToCallback : true 
         },
         function(req, username, password, done) {
-
+            console.log('hello!');
             User.findOne({'username': username},
                 function(err, user){
                     if(err){
